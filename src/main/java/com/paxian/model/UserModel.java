@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Document(collection = "team-db")
+@Document(collection = "team-collection")
 public class UserModel {
 
     @Id
