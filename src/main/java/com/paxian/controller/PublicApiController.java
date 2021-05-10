@@ -2,6 +2,8 @@ package com.paxian.controller;
 
 import com.paxian.db.ConfirmLoginRepo;
 import com.paxian.db.DataRepository;
+import com.paxian.db.TokenRepository;
+import com.paxian.model.Token;
 import com.paxian.model.UserModel;
 import com.paxian.payload.MessageResponse;
 import com.paxian.security.JwtConstants;
@@ -24,25 +26,13 @@ public class PublicApiController {
     public DataRepository dataRepository;
 
     @Autowired
+    public TokenRepository tokenRepository;
+
+    @Autowired
     public ConfirmLoginRepo confirmLoginRepo;
-
-    @GetMapping("/home")
-    public List<UserModel> getHome() {
-        return this.dataRepository.findAll();
-    }
-
-    @GetMapping("/riders")
-    public List<UserModel> getRiders() {
-        return this.dataRepository.findAll();
-    }
 
     @GetMapping("/team")
     public List<UserModel> getTeam() {
-        return this.dataRepository.findAll();
-    }
-
-    @GetMapping("/user/data")
-    public List<UserModel> getUserData() {
         return this.dataRepository.findAll();
     }
 
@@ -63,23 +53,31 @@ public class PublicApiController {
     }
 
     @DeleteMapping("/team/delete/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserModel> delete(@PathVariable("id") UserModel id) {
         this.dataRepository.delete(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
-    @PostMapping("/rider/validate")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> validateRider(@RequestBody UserModel userModel) {
-        this.dataRepository.save(userModel);
-        return new ResponseEntity<>("Rider validated!", HttpStatus.CREATED);
+    @GetMapping("/token")
+    public List<Token> getToken() {
+        return this.tokenRepository.findAll();
     }
 
-    @PostMapping("/rider/create")
+    @PostMapping("/token")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> createRider(@RequestBody UserModel userModel) {
-        this.dataRepository.save(userModel);
-        return new ResponseEntity<>("Rider validated!", HttpStatus.CREATED);
+    public ResponseEntity<?> postToken(@RequestBody Token tokenData) {
+
+        tokenData.setToken(tokenData.getToken());
+
+        this.tokenRepository.save(tokenData);
+        return new ResponseEntity<>(tokenData, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/token/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Token> deleteToken(@PathVariable("id") Token id) {
+        this.tokenRepository.delete(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 }

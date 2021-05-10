@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,6 +35,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/api/token/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 //remove csrf and state in session because in jwt, we do not need them
@@ -48,18 +56,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 // configure access rules
-                .antMatchers("/api/rider/validate").hasRole("MANAGER")
 
-                .antMatchers("/api/home").hasAnyRole("ADMIN", "MANAGER")
-                .antMatchers("/api/riders").hasAnyRole("ADMIN", "MANAGER")
-
-                .antMatchers("/api/team").permitAll()
-                .antMatchers("/api/team/create").permitAll()
-                .antMatchers("/api/customer/create").permitAll()
-                .antMatchers("/api/customer/services").permitAll()
-                .antMatchers("/api/rider/create").permitAll()
-                .antMatchers("/api/rider/services").permitAll()
-                .antMatchers("/api/login/**").permitAll()
+                //.antMatchers("/api/some_other_route_with_role").hasRole("MANAGER")
+                .antMatchers("/api/token/**").permitAll()
+                .antMatchers("/api/team/**").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
 

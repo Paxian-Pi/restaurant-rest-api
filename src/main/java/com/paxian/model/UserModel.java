@@ -1,15 +1,13 @@
 package com.paxian.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Document(collection = "team-collection")
+@Document(collection = "team")
 public class UserModel {
 
     @Id
