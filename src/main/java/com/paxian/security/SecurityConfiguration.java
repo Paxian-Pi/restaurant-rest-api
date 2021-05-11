@@ -34,12 +34,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userPrincipalDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Override
+    /*@Override
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
                 .antMatchers("/api/token/**");
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
